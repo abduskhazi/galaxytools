@@ -53,7 +53,8 @@ def descriptors(mol, functions):
     Calculates the descriptors of a given molecule.
     """
     for name, function in functions:
-        yield (name, function(mol))
+        if(name != 'setupAUTOCorrDescriptors'):
+            yield (name, function(mol))
 
 
 if __name__ == "__main__":
