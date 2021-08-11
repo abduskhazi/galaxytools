@@ -35,9 +35,9 @@ def parse_command_line(argv):
 def addh(args):
     outfile = pybel.Outputfile(args.iformat, args.output, overwrite=True)
     for mol in pybel.readfile(args.iformat, args.input):
-        if mol.OBMol.NumHvyAtoms() > 5:
-            mol.removeh()
-            mol.OBMol.AddHydrogens(args.polar, True, args.pH)
+        if mol.OBMol.NumHvyAtoms() > 0: #5
+            # mol.removeh()
+            added_hydrogens = mol.OBMol.AddHydrogens(args.polar, True, args.pH)
             outfile.write(mol)
     outfile.close()
 

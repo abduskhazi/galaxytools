@@ -6,7 +6,7 @@ import sys
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
-
+import os
 
 def get_supplier(infile, format="smiles"):
     """
@@ -54,8 +54,13 @@ def descriptors(mol, functions):
     """
     for name, function in functions:
         if(name != 'setupAUTOCorrDescriptors'):
+            print(name)
             yield (name, function(mol))
 
+def add_hydrogen_atoms(m):
+    # print(m.GetNumAtoms())
+    m2 = Chem.RemoveHs(m)
+    # print(m2.GetNumAtoms())
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -85,6 +90,7 @@ if __name__ == "__main__":
         help="Write header line.",
     )
 
+    current_working_directory = os.getcwd()
     args = parser.parse_args()
 
     if args.iformat == "sdf":
@@ -112,6 +118,7 @@ if __name__ == "__main__":
         if not mol:
             continue
         descs = descriptors(mol, functions)
+        add_hydrogen_atoms(mol)
         try:
             molecule_id = mol.GetProp("_Name")
         except KeyError:
